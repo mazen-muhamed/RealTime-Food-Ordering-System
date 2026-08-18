@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FastBite · Customer</title><link rel="stylesheet" href="static/app.css">
+</head>
+<body>
+<header class="topbar"><a class="logo" href="/customer">FastBite</a><div class="topbar-right"><span id="user-name"></span><button id="logout" class="button ghost">Sign out</button></div></header>
+<main class="page customer-page">
+  <section class="hero-line"><div><span class="eyebrow">CUSTOMER CONSOLE</span><h1>Build your order.</h1><p>Track every status transition without refreshing the page.</p></div><div class="live-pill"><span></span>Live updates</div></section>
+  <div id="customer-message" class="message hidden"></div>
+  <section class="content-grid">
+    <div><div class="section-head"><h2>Menu</h2><span>FastBite Kitchen</span></div><div id="menu" class="menu-grid"></div></div>
+    <aside class="cart-card"><div class="section-head"><h2>Your order</h2><span id="cart-count">0 items</span></div><div id="cart-items" class="stack"></div><div class="cart-footer"><div><span>Total</span><strong id="cart-total">$0.00</strong></div><button id="place-order" class="button primary" disabled>Place order</button></div></aside>
+  </section>
+  <section class="orders-section"><div class="section-head"><h2>Order history</h2><span>Newest first</span></div><div id="orders" class="orders-stack"></div></section>
+</main>
+<script src="static/customer.js"></script>
+</body></html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Food Delivery Syste,</title>
+    <link rel="stylesheet" href="static/app.css"/>
+  </head>
+  <body class="app-shell centered">
+    <main class="auth-layout">
+      <section class="brand-panel">
+        <span class="eyebrow">REALTIME FOOD DELIVERY</span>
+        <h1>Orders that move<br /><span>with your backend.</span></h1>
+        <p>
+          Place an order, watch its lifecycle change live, and inspect the audit
+          trail behind every action.
+
+      </section>
+      <section class="auth-card">
+        <div class="tabs">
+          <button class="tab active" data-target="login">Sign in</button
+          ><button class="tab" data-target="signup">Create account</button>
+        </div>
+        <div id="auth-message" class="message hidden"></div>
+        <form id="login" class="auth-form">
+          <div>
+            <label>Email</label
+            ><input
+              name="email"
+              type="email"
+              value="customer@example.com"
+              required
+            />
+          </div>
+          <div>
+            <label>Password</label
+            ><input
+              name="password"
+              type="password"
+              value="Customer123!"
+              required
+            />
+          </div>
+          <button class="button primary" type="submit">Sign in</button>
+          <p class="hint">Demo: customer@example.com / Customer123</p>
+        </form>
+        <form id="signup" class="auth-form hidden">
+          <div><label>Full name</label><input name="full_name" required /></div>
+          <div>
+            <label>Email</label><input name="email" type="email" required />
+          </div>
+          <div>
+            <label>Password</label
+            ><input name="password" type="password" minlength="8" required />
+          </div>
+          <button class="button primary" type="submit">Create account</button>
+        </form>
+      </section>
+    </main>
+    <script>
+      const tabs = document.querySelectorAll(".tab");
+      const forms = document.querySelectorAll(".auth-form");
+      const msg = document.getElementById("auth-message");
+      function showMessage(text, kind = "error") {
+        msg.textContent = text;
+        msg.className = "message " + kind;
+      }
+      tabs.forEach((tab) =>
+        tab.addEventListener("click", () => {
+          tabs.forEach((t) => t.classList.remove("active"));
+          forms.forEach((f) => f.classList.add("hidden"));
+          tab.classList.add("active");
+          document
+            .getElementById(tab.dataset.target)
+            .classList.remove("hidden");
+          msg.className = "message hidden";
+        }),
+      );
+      async function api(path, options = {}) {
+        const r = await fetch(path, {
+          headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {}),
+          },
+          ...options,
+        });
+        const data = await r.json().catch(() => null);
+        if (!r.ok) throw new Error(data?.detail || "Request failed");
+        return data;
+      }
+      document.getElementById("login").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const body = Object.fromEntries(new FormData(e.currentTarget));
+        try {
+          const user = await api("/auth/login", {
+            method: "POST",
+            body: JSON.stringify(body),
+          });
+          location.href = user.role === "admin" ? "/admin" : "/customer";
+        } catch (err) {
+          showMessage(err.message);
+        }
+      });
+      document
+        .getElementById("signup")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const body = Object.fromEntries(new FormData(e.currentTarget));
+          try {
+            await api("/auth/signup", {
+              method: "POST",
+              body: JSON.stringify(body),
+            });
+            showMessage("Account created. Sign in to continue.", "success");
+            document.querySelector('[data-target="login"]').click();
+          } catch (err) {
+            showMessage(err.message);
+          }
+        });
+    </script>
+  </body>
+</html>
