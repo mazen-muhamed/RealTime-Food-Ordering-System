@@ -1,1 +1,6 @@
--- Structure placeholder. Database schema will be added later.
+CREATE_SQL_TABLES = """
+
+
+
+
+"""
